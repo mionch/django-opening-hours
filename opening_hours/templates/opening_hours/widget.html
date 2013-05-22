@@ -55,7 +55,7 @@ function loads(){
         for (l = 0; l < json[day].length; l++) {
             $("."+day).append("<td class=\"{{prefix}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\"></td><td class=\"ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\"></td>")
         }
-        $("."+day).append("<td class=\"{{prefix}}_ajax\"><a href=\"#\" onclick=\"add('"+day+"');\"><img src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a></td>");
+        $("."+day).append("<td class=\"{{prefix}}_ajax\"><a href=\"#\" onclick=\"add('"+day+"');\"><img src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a>&nbsp;<a href=\"#\" onclick=\"rm('"+day+"');\"><img src=\"{{STATIC_URL}}admin/img/icon-no.gif\"></a></td>");
     });
     set_json(json);
 }
