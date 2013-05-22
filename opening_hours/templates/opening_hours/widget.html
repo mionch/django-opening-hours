@@ -5,24 +5,39 @@ var json = '{"mo": [["10:00", "12:00"],["13:00", "20:00"]], "tu": [["10:00", "20
 json = JSON.parse(json);
 
 function add(json, day) {
+    json = dumps(json);
     json[day].push(["", ""]);
     $(".ajax").remove();
-    init(json)
+    loads(json)
 }
 
-function init(json){
-        ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
-            for (l = 0; l < json[day].length; l++) {
-                $("."+day).append("<td class=\"ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\"></td><td class=\"ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\"></td>")
-            }
-            $("."+day).append("<td class=\"ajax\"><a href=\"#\" onclick=\"add(json, '"+day+"');\"><img src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a></td>");
-        });
-    }
+function dumps(json){
+    ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
+        for (l = 0; l < json[day].length; l++) {
+            json[day][l][0] = $("#"+day+"_"+l+"_from").val()
+            json[day][l][1] = $("#"+day+"_"+l+"_to").val()
+        }
+    });
+    return json;
+}
+
+function loads(){
+    ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
+        for (l = 0; l < json[day].length; l++) {
+            $("."+day).append("<td class=\"ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\"></td><td class=\"ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\"></td>")
+        }
+        $("."+day).append("<td class=\"ajax\"><a href=\"#\" onclick=\"add(json, '"+day+"');\"><img src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a></td>");
+    });
+}
 
 $(document).ready(function(){
-    init(json);
+    loads(json);
+    setInterval(function () {
+        $("#input").val(JSON.stringify(dumps(json)));
+    }, 700)
 })
 </script>
+<input id="input" type="hidden" name="{{name}}" value="aa">
 <table>
     <tr class="mo">
         <td>Mo</td>

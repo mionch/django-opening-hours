@@ -9,5 +9,6 @@ class OpeningHoursWidget(Widget):
     def render(self, name, value, attrs=None):
         return mark_safe(loader.render_to_string("opening_hours/widget.html", {
             "value": value,
+            "name": name,
             "STATIC_URL": settings.STATIC_URL,
         }))
