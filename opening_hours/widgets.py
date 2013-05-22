@@ -10,7 +10,7 @@ class OpeningHoursWidget(Widget):
     is_required = False
     def render(self, name, value, attrs=None):
         if not value:
-            value = '{"mo":[["", ""]], "tu":[["", ""]], "we":[["", ""]], "th":[["", ""]], "fr":[["", ""]], "sa":[["", ""]], "su":[["", ""]], }'
+            value = '{"mo":[["", ""]], "tu":[["", ""]], "we":[["", ""]], "th":[["", ""]], "fr":[["", ""]], "sa":[["", ""]], "su":[["", ""]]}'
         return mark_safe(loader.render_to_string("opening_hours/widget.html", {
             "value": value,
             "name": name,
