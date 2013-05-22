@@ -1,4 +1,9 @@
 <script type="text/javascript" src="{{STATIC_URL}}opening_hours/jquery-1.9.1.min.js"></script>
+<style type="text/css">
+.time {
+    width: 40px;
+}
+</style>
 <script type="text/javascript">
 
 function is_time(val){
@@ -53,7 +58,7 @@ function loads(){
     json = get_json();
     ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
         for (l = 0; l < json[day].length; l++) {
-            $("."+day).append("<td class=\"{{prefix}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\"></td><td class=\"{{prefix}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\"></td>")
+            $("."+day).append("<td class=\"{{prefix}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\" class=\"time\"></td><td class=\"{{prefix}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\" class=\"time\"></td>")
         }
         $("."+day).append("<td class=\"{{prefix}}_ajax\"><a href=\"#\" onclick=\"add('"+day+"');\"><img src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a>&nbsp;<a href=\"#\" onclick=\"rm('"+day+"');\"><img src=\"{{STATIC_URL}}admin/img/icon-no.gif\"></a></td>");
     });
