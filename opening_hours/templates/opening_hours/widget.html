@@ -29,11 +29,12 @@ function add(day) {
 
 function rm(day) {
     json = get_json()
-    json[day].pop();
-    $(".{{prefix}}_ajax").remove();
-    set_json(json);
-    loads(json);
-
+    if(confirm('remove this opening hours?')) {
+        json[day].pop();
+        $(".{{prefix}}_ajax").remove();
+        set_json(json);
+        loads(json);
+    }
 }
 
 function dumps(){
