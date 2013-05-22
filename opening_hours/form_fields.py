@@ -19,7 +19,7 @@ class OpeningHoursField(forms.CharField):
     def clean(self, value):
         def is_time(s): # XXX:
             import re
-            if s and re.match(r"\d+:\d+", s) and re.match(r"\d+:\d+", s).string == s:
+            if s and re.match(r"\d+:\d+", s) and re.match(r"\d+:\d+", s).group() == s:
                 return True
             return False
 

@@ -27,8 +27,8 @@ function dumps(){
     ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
         for (l = 0; l < json[day].length; l++) {
             val = $("#"+day+"_"+l+"_from").val();
+            json[day][l][0] = val;
             if (is_time(val)){
-                json[day][l][0] = val;
                 $("#"+day+"_"+l+"_from").attr("style", "border: 1px solid #ccc;");
             }
             else {
@@ -36,8 +36,8 @@ function dumps(){
             }
 
             val = $("#"+day+"_"+l+"_to").val();
+            json[day][l][1] = val;
             if (is_time(val)){
-                json[day][l][1] = val;
                 $("#"+day+"_"+l+"_to").attr("style", "border: 1px solid #ccc;");
             }
             else {
