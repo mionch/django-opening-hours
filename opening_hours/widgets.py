@@ -4,6 +4,8 @@ from django.template import loader
 from django.utils.safestring import mark_safe
 from django.conf import settings
 
+import random
+
 class OpeningHoursWidget(Widget):
     is_required = False
     def render(self, name, value, attrs=None):
@@ -13,4 +15,5 @@ class OpeningHoursWidget(Widget):
             "value": value,
             "name": name,
             "STATIC_URL": settings.STATIC_URL,
+            "prefix": str(random.randint(11111111, 99999999)),
         }))

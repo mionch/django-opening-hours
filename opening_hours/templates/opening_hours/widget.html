@@ -8,18 +8,17 @@ function is_time(val){
 }
 
 function get_json() {
-    return JSON.parse($("#input_out").val());
+    return JSON.parse($("#{{prefix}}_input_out").val());
 }
 
 function set_json(json) {
-    $("#input_out").val(JSON.stringify(json));
+    $("#{{prefix}}_input_out").val(JSON.stringify(json));
 }
 
 function add(day) {
-    json = $("input_out").val();
-    json = dumps(json);
+    json = get_json()
     json[day].push(["", ""]);
-    $(".ajax").remove();
+    $(".{{prefix}}_ajax").remove();
     set_json(json);
     loads(json);
 
@@ -40,7 +39,7 @@ function dumps(){
 
             val = $("#"+day+"_"+l+"_to").val();
             if (is_time(val)){
-                json[day][l][0] = val;
+                json[day][l][1] = val;
                 $("#"+day+"_"+l+"_to").attr("style", "border: 1px solid #ccc;");
             }
             else {
@@ -56,21 +55,21 @@ function loads(){
     json = get_json();
     ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
         for (l = 0; l < json[day].length; l++) {
-            $("."+day).append("<td class=\"ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\"></td><td class=\"ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\"></td>")
+            $("."+day).append("<td class=\"{{prefix}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\"></td><td class=\"ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\"></td>")
         }
-        $("."+day).append("<td class=\"ajax\"><a href=\"#\" onclick=\"add('"+day+"');\"><img src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a></td>");
+        $("."+day).append("<td class=\"{{prefix}}_ajax\"><a href=\"#\" onclick=\"add('"+day+"');\"><img src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a></td>");
     });
     set_json(json);
 }
 
 $(document).ready(function(){
-    $("#input_out").val($("#input_in").val())
+    $("#{{prefix}}_input_out").val($("#{{prefix}}_input_in").val())
     loads();
     setInterval(dumps, 100);
 })
 </script>
-<input id="input_in" type="hidden" value="{{value}}">
-<input id="input_out" type="hidden" name="{{name}}" value="">
+<input id="{{prefix}}_input_in" type="hidden" value="{{value}}">
+<input id="{{prefix}}_input_out" type="hidden" name="{{name}}" value="">
 <table>
     <tr class="mo">
         <td>Mo</td>
