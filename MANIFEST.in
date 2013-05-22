@@ -1,0 +1,2 @@
+recursive-include opening_hour/static *
+recursive-include opening_hour/templates *
