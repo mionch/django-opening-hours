@@ -27,6 +27,15 @@ function add(day) {
 
 }
 
+function rm(day) {
+    json = get_json()
+    json[day].pop();
+    $(".{{prefix}}_ajax").remove();
+    set_json(json);
+    loads(json);
+
+}
+
 function dumps(){
     json = get_json();
     ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
