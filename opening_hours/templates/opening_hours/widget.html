@@ -3,40 +3,70 @@
 <script type="text/javascript">
 // var json = '{"mo": [["10:00", "12:00"],["13:00", "20:00"]], "tu": [["10:00", "20:00"]], "we": [["10:00", "12:00"],["13:00", "20:00"]], "th": [["10:00", "20:00"]], "fr": [["10:00", "12:00"],["13:00", "20:00"]], "sa": [["10:00", "20:00"]], "su": [["10:00", "12:00"],["13:00", "20:00"]]}';
 
-function add(json, day) {
+function is_time(val){
+    return val.match(/\d+:\d+/) != null && val.match(/\d+:\d+/).length == 1 && val.match(/\d+:\d+/)[0] == val;
+}
+
+function get_json() {
+    return JSON.parse($("#input_out").val());
+}
+
+function set_json(json) {
+    $("#input_out").val(JSON.stringify(json));
+}
+
+function add(day) {
+    json = $("input_out").val();
     json = dumps(json);
     json[day].push(["", ""]);
     $(".ajax").remove();
+    set_json(json);
     loads(json);
+
 }
 
-function dumps(json){
+function dumps(){
+    json = get_json();
     ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
         for (l = 0; l < json[day].length; l++) {
-            json[day][l][0] = $("#"+day+"_"+l+"_from").val()
-            json[day][l][1] = $("#"+day+"_"+l+"_to").val()
+            val = $("#"+day+"_"+l+"_from").val();
+            if (is_time(val)){
+                json[day][l][0] = val;
+                $("#"+day+"_"+l+"_from").attr("style", "border: 1px solid #ccc;");
+            }
+            else {
+                $("#"+day+"_"+l+"_from").attr("style", "border: 1px solid red;");
+            }
+
+            val = $("#"+day+"_"+l+"_to").val();
+            if (is_time(val)){
+                json[day][l][0] = val;
+                $("#"+day+"_"+l+"_to").attr("style", "border: 1px solid #ccc;");
+            }
+            else {
+                $("#"+day+"_"+l+"_to").attr("style", "border: 1px solid red;");
+            }
+            
         }
     });
-    return json;
+    set_json(json);
 }
 
-function loads(json){
+function loads(){
+    json = get_json();
     ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
         for (l = 0; l < json[day].length; l++) {
             $("."+day).append("<td class=\"ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\"></td><td class=\"ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\"></td>")
         }
-        $("."+day).append("<td class=\"ajax\"><a href=\"#\" onclick=\"add(json, '"+day+"');\"><img src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a></td>");
+        $("."+day).append("<td class=\"ajax\"><a href=\"#\" onclick=\"add('"+day+"');\"><img src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a></td>");
     });
+    set_json(json);
 }
 
 $(document).ready(function(){
-    json = $("#input_in").val();
-    var json = JSON.parse(json);
-    console.log(json);
-    loads(json);
-    setInterval(function () {
-        $("#input_out").val(JSON.stringify(dumps(json)));
-    }, 700)
+    $("#input_out").val($("#input_in").val())
+    loads();
+    setInterval(dumps, 100);
 })
 </script>
 <input id="input_in" type="hidden" value="{{value}}">
