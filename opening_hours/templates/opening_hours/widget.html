@@ -1,14 +1,13 @@
 <script type="text/javascript" src="{{STATIC_URL}}opening_hours/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="{{STATIC_URL}}opening_hours/widget.js"></script>
 <script type="text/javascript">
-var json = '{"mo": [["10:00", "12:00"],["13:00", "20:00"]], "tu": [["10:00", "20:00"]], "we": [["10:00", "12:00"],["13:00", "20:00"]], "th": [["10:00", "20:00"]], "fr": [["10:00", "12:00"],["13:00", "20:00"]], "sa": [["10:00", "20:00"]], "su": [["10:00", "12:00"],["13:00", "20:00"]]}';
-json = JSON.parse(json);
+// var json = '{"mo": [["10:00", "12:00"],["13:00", "20:00"]], "tu": [["10:00", "20:00"]], "we": [["10:00", "12:00"],["13:00", "20:00"]], "th": [["10:00", "20:00"]], "fr": [["10:00", "12:00"],["13:00", "20:00"]], "sa": [["10:00", "20:00"]], "su": [["10:00", "12:00"],["13:00", "20:00"]]}';
 
 function add(json, day) {
     json = dumps(json);
     json[day].push(["", ""]);
     $(".ajax").remove();
-    loads(json)
+    loads(json);
 }
 
 function dumps(json){
@@ -21,7 +20,7 @@ function dumps(json){
     return json;
 }
 
-function loads(){
+function loads(json){
     ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
         for (l = 0; l < json[day].length; l++) {
             $("."+day).append("<td class=\"ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\"></td><td class=\"ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\"></td>")
@@ -31,13 +30,17 @@ function loads(){
 }
 
 $(document).ready(function(){
+    json = $("#input_in").val();
+    var json = JSON.parse(json);
+    console.log(json);
     loads(json);
     setInterval(function () {
-        $("#input").val(JSON.stringify(dumps(json)));
+        $("#input_out").val(JSON.stringify(dumps(json)));
     }, 700)
 })
 </script>
-<input id="input" type="hidden" name="{{name}}" value="aa">
+<input id="input_in" type="hidden" value="{{value}}">
+<input id="input_out" type="hidden" name="{{name}}" value="">
 <table>
     <tr class="mo">
         <td>Mo</td>
