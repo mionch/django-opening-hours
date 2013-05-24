@@ -42,9 +42,8 @@ function rm(day) {
 function dumps(){
     json = get_json();
     ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
+        json[day+"_note"] = $("#"+day+"_note").val();
         for (l = 0; l < json[day].length; l++) {
-            val = $("#"+day+"_note").val();
-            json[day+"_note"] = val;
             val = $("#"+day+"_"+l+"_from").val();
             json[day][l][0] = val;
             if (is_time(val)){
@@ -62,7 +61,6 @@ function dumps(){
             else {
                 $("#"+day+"_"+l+"_to").attr("style", "border: 1px solid red;");
             }
-            console.log(json);
         }
     });
     set_json(json);
