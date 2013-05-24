@@ -43,6 +43,8 @@ function dumps(){
     json = get_json();
     ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
         for (l = 0; l < json[day].length; l++) {
+            val = $("#"+day+"_note").val();
+            json[day+"_note"] = val;
             val = $("#"+day+"_"+l+"_from").val();
             json[day][l][0] = val;
             if (is_time(val)){
@@ -60,7 +62,7 @@ function dumps(){
             else {
                 $("#"+day+"_"+l+"_to").attr("style", "border: 1px solid red;");
             }
-            
+            console.log(json);
         }
     });
     set_json(json);
@@ -72,7 +74,7 @@ function loads(){
         for (l = 0; l < json[day].length; l++) {
             $("."+day).append("<td class=\"{{prefix}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\" class=\"time\"></td><td class=\"{{prefix}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\" class=\"time\"></td>")
         }
-        $("."+day).append("<td class=\"{{prefix}}_ajax\"><img class=\"hover\" onclick=\"add('"+day+"');\" src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a>&nbsp;<img  class=\"hover\" onclick=\"rm('"+day+"');\" src=\"{{STATIC_URL}}admin/img/icon-no.gif\"></td>");
+        $("."+day).append("<td class=\"{{prefix}}_ajax\" colspan=\"10\"><input type=\"text\" id=\""+day+"_note\" value=\""+json[day+"_note"]+"\" placeholder=\"note\">&nbsp;<img class=\"hover\" onclick=\"add('"+day+"');\" src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a>&nbsp;<img  class=\"hover\" onclick=\"rm('"+day+"');\" src=\"{{STATIC_URL}}admin/img/icon-no.gif\"></td>");
     });
     set_json(json);
 }
