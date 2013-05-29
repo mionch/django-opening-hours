@@ -68,9 +68,9 @@ function dumps(){
 
 function loads(){
     json = get_json();
-    ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
+    get_days().forEach(function (day) {
         if (! $("."+day).length) {
-            $("#{{name}}_opening_hours_table").append("<tr class=\""+day+"\"></tr>");
+            $("#{{name}}_opening_hours_table").append("<tr class=\""+day+" day\"><td>"+day+"</td></tr>");
         }
         for (l = 0; l < json[day].length; l++) {
             $("."+day).append("<td class=\"{{name}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\" class=\"time\"></td><td class=\"{{name}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\" class=\"time\"></td>")
@@ -80,10 +80,36 @@ function loads(){
     set_json(json);
 }
 
+function get_days(){
+    json = get_json();
+    if (json["first_day"] == "su"){
+        return ["su", "mo", "tu", "we", "th", "fr", "sa"];
+    }
+    else {
+        return ["mo", "tu", "we", "th", "fr", "sa", "su"];
+    }
+}
+
 $(document).ready(function(){
     $("#{{name}}_input_out").val($("#{{name}}_input_in").val())
+
+    json = get_json()
+    if (! json.hasOwnProperty("first_day")) json["first_day"] = "mo";
+    $("#{{name}}_first_day").val(json["first_day"]);
+    set_json(json);
+
     loads();
     setInterval(dumps, 100);
+
+    setInterval(function (){
+        json = get_json();
+        if ($("#{{name}}_first_day").val() != json["first_day"]) {
+            json["first_day"] = $("#{{name}}_first_day").val();
+            set_json(json);
+            $(".day").remove();
+            loads();
+        }
+    }, 100);
 })
 </script>
 first day of week
