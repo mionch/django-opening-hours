@@ -14,7 +14,7 @@ class OpeningHoursField(forms.CharField):
             'widget': OpeningHoursWidget(),
         }
         defaults.update(kwargs)
-        return super(self.__class__, self).__init__(**defaults)
+        return super(OpeningHoursField, self).__init__(**defaults)
 
     def clean(self, value):
         def is_time(s): # XXX:
