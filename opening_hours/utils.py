@@ -1,4 +1,8 @@
+import json
+
 def is_open(date, opening_hours):
+    if type(opening_hours) == str:
+        opening_hours = json.loads(opening_hours)
     try:
         day = opening_hours[date.strftime("%a")[:2].lower()]
     except KeyError:
