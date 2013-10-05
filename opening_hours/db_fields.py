@@ -1,11 +1,15 @@
 from django.db import models
-
+from django.utils.six import with_metaclass
 import form_fields
 import widgets
+import json
 
-class OpeningHoursField(models.Field):
+class OpeningHoursField(with_metaclass(models.SubfieldBase, models.Field)):
     def get_internal_type(self):
         return "TextField"
+
+    def to_python(self, value):
+        return json.loads(value)
 
     def formfield(self, **kwargs):
         defaults = {
