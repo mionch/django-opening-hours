@@ -12,17 +12,17 @@ function is_time(val){
 }
 
 function get_json() {
-    return JSON.parse($("#{{name}}_input_out").val());
+    return JSON.parse(django.jQuery("#{{name}}_input_out").val());
 }
 
 function set_json(json) {
-    $("#{{name}}_input_out").val(JSON.stringify(json));
+    django.jQuery("#{{name}}_input_out").val(JSON.stringify(json));
 }
 
 function add(day) {
     json = get_json()
     json[day].push(["", ""]);
-    $(".{{name}}_ajax").remove();
+    django.jQuery(".{{name}}_ajax").remove();
     set_json(json);
     loads(json);
 
@@ -32,7 +32,7 @@ function rm(day) {
     json = get_json()
     if(confirm('remove this opening hours?')) {
         json[day].pop();
-        $(".{{name}}_ajax").remove();
+        django.jQuery(".{{name}}_ajax").remove();
         set_json(json);
         loads(json);
     }
@@ -41,24 +41,24 @@ function rm(day) {
 function dumps(){
     json = get_json();
     ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
-        json[day+"_note"] = $("#"+day+"_note").val();
+        json[day+"_note"] = django.jQuery("#"+day+"_note").val();
         for (l = 0; l < json[day].length; l++) {
-            val = $("#"+day+"_"+l+"_from").val();
+            val = django.jQuery("#"+day+"_"+l+"_from").val();
             json[day][l][0] = val;
             if (is_time(val)){
-                $("#"+day+"_"+l+"_from").attr("style", "border: 1px solid #ccc;");
+                django.jQuery("#"+day+"_"+l+"_from").attr("style", "border: 1px solid #ccc;");
             }
             else {
-                $("#"+day+"_"+l+"_from").attr("style", "border: 1px solid red;");
+                django.jQuery("#"+day+"_"+l+"_from").attr("style", "border: 1px solid red;");
             }
 
-            val = $("#"+day+"_"+l+"_to").val();
+            val = django.jQuery("#"+day+"_"+l+"_to").val();
             json[day][l][1] = val;
             if (is_time(val)){
-                $("#"+day+"_"+l+"_to").attr("style", "border: 1px solid #ccc;");
+                django.jQuery("#"+day+"_"+l+"_to").attr("style", "border: 1px solid #ccc;");
             }
             else {
-                $("#"+day+"_"+l+"_to").attr("style", "border: 1px solid red;");
+                django.jQuery("#"+day+"_"+l+"_to").attr("style", "border: 1px solid red;");
             }
         }
     });
@@ -68,13 +68,13 @@ function dumps(){
 function loads(){
     json = get_json();
     get_days().forEach(function (day) {
-        if (! $("."+day).length) {
-            $("#{{name}}_opening_hours_table").append("<tr class=\""+day+" day\"><td>"+day+"</td></tr>");
+        if (! django.jQuery("."+day).length) {
+            django.jQuery("#{{name}}_opening_hours_table").append("<tr class=\""+day+" day\"><td>"+day+"</td></tr>");
         }
         for (l = 0; l < json[day].length; l++) {
-            $("."+day).append("<td class=\"{{name}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\" class=\"time\"></td><td class=\"{{name}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\" class=\"time\"></td>")
+            django.jQuery("."+day).append("<td class=\"{{name}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\" class=\"time\"></td><td class=\"{{name}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\" class=\"time\"></td>")
         }
-        $("."+day).append("<td class=\"{{name}}_ajax\" colspan=\"10\"><input type=\"text\" id=\""+day+"_note\" value=\""+json[day+"_note"]+"\" placeholder=\"note\">&nbsp;<img class=\"hover\" onclick=\"add('"+day+"');\" src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a>&nbsp;<img  class=\"hover\" onclick=\"rm('"+day+"');\" src=\"{{STATIC_URL}}admin/img/icon-no.gif\"></td>");
+        django.jQuery("."+day).append("<td class=\"{{name}}_ajax\" colspan=\"10\"><input type=\"text\" id=\""+day+"_note\" value=\""+json[day+"_note"]+"\" placeholder=\"note\">&nbsp;<img class=\"hover\" onclick=\"add('"+day+"');\" src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a>&nbsp;<img  class=\"hover\" onclick=\"rm('"+day+"');\" src=\"{{STATIC_URL}}admin/img/icon-no.gif\"></td>");
     });
     set_json(json);
 }
@@ -89,12 +89,12 @@ function get_days(){
     }
 }
 
-$(document).ready(function(){
-    $("#{{name}}_input_out").val($("#{{name}}_input_in").val())
+django.jQuery(document).ready(function(){
+    django.jQuery("#{{name}}_input_out").val(django.jQuery("#{{name}}_input_in").val())
 
     json = get_json()
     if (! json.hasOwnProperty("first_day")) json["first_day"] = "mo";
-    $("#{{name}}_first_day").val(json["first_day"]);
+    django.jQuery("#{{name}}_first_day").val(json["first_day"]);
     set_json(json);
 
     loads();
@@ -102,10 +102,10 @@ $(document).ready(function(){
 
     setInterval(function (){
         json = get_json();
-        if ($("#{{name}}_first_day").val() != json["first_day"]) {
-            json["first_day"] = $("#{{name}}_first_day").val();
+        if (django.jQuery("#{{name}}_first_day").val() != json["first_day"]) {
+            json["first_day"] = django.jQuery("#{{name}}_first_day").val();
             set_json(json);
-            $(".day").remove();
+            django.jQuery(".day").remove();
             loads();
         }
     }, 100);
@@ -119,5 +119,5 @@ first day of week
 <input id="{{name}}_input_in" type="hidden" value='{{value|safe}}'>
 <input id="{{name}}_input_out" type="hidden" name="{{name}}" value="">
 <table id="{{name}}_opening_hours_table">
-    
+
 </table>
