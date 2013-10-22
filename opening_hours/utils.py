@@ -1,7 +1,7 @@
 import json
 
 def is_open(date, opening_hours):
-    if type(opening_hours) == str:
+    if type(opening_hours) == str or type(opening_hours) == unicode:
         opening_hours = json.loads(opening_hours)
     try:
         day = opening_hours[date.strftime("%a")[:2].lower()]

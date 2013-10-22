@@ -1,18 +1,35 @@
-from django.forms.widgets import Widget
+from django.db import models
+from django.utils.six import with_metaclass
+import form_fields
+import widgets
+import json
 
-from django.template import loader
-from django.utils.safestring import mark_safe
-from django.conf import settings
+class OpeningHoursField(with_metaclass(models.SubfieldBase, models.Field)):
+    def get_internal_type(self):
+        return "TextField"
 
+    def to_python(self, value):
+        if type(value) == str or type(value) == unicode:
+            return json.loads(value)
+        else:
+            return value
 
-class OpeningHoursWidget(Widget):
-    is_required = False
-    template = "opening_hours/widget.html"
-    def render(self, name, value, attrs=None):
-        if not value:
-            value = '{"first_day": "mo", "mo": [], "tu":[], "we":[], "th":[], "fr":[], "sa":[], "su":[], "mo_note": "", "tu_note": "", "we_note":"", "th_note":"", "fr_note":"", "sa_note":"", "su_note":"" }'
-        return mark_safe(loader.render_to_string(self.template, {
-            "value": value,
-            "name": name,
-            "STATIC_URL": settings.STATIC_URL,
-        }))
+    def get_prep_value(self, value):
+        if type(value) != str or type(value) != unicode:
+            return json.dumps(value)
+        else:
+            return value
+
+    def formfield(self, **kwargs):
+        defaults = {
+            'form_class': form_fields.OpeningHoursField,
+            'widget': widgets.OpeningHoursWidget,
+        }
+        defaults.update(kwargs)
+        return super(OpeningHoursField, self).formfield(**defaults)
+
+    def south_field_triple(self):
+        from south.modelsinspector import introspector
+        field_class = "django.db.models.fields.TextField"
+        args, kwargs = introspector(self)
+        return (field_class, args, kwargs)
