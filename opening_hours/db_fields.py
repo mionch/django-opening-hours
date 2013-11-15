@@ -9,7 +9,16 @@ class OpeningHoursField(with_metaclass(models.SubfieldBase, models.Field)):
         return "TextField"
 
     def to_python(self, value):
-        return json.loads(value)
+        if type(value) == str or type(value) == unicode:
+            return json.loads(value)
+        else:
+            return value
+
+    def get_prep_value(self, value):
+        if type(value) != str or type(value) != unicode:
+            return json.dumps(value)
+        else:
+            return value
 
     def formfield(self, **kwargs):
         defaults = {
