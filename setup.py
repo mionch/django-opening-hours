@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "django-opening-hours",
-    version = "1.3.1",
+    version = "1.4.0",
     url = 'https://github.com/sikaondrej/django-opening-hours/',
     license = 'GNU LGPL v.3',
     description = "",
