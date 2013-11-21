@@ -7,7 +7,7 @@ setup(
     name = "django-opening-hours",
     version = "1.4.1",
     url = 'https://github.com/sikaondrej/django-opening-hours/',
-    license = 'GNU LGPL v.3',
+    license = 'MIT',
     description = "",
     author = 'Ondrej Sika',
     author_email = 'ondrej@ondrejsika.com',
