@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "django-opening-hours",
-    version = "1.4.1",
+    version = "1.4.2",
     url = 'https://github.com/sikaondrej/django-opening-hours/',
     license = 'MIT',
     description = "",

@@ -12,9 +12,11 @@ class OpeningHoursWidget(Widget):
     template = "opening_hours/widget.html"
     def render(self, name, value, attrs=None):
         if not value:
-            value = {"first_day": "mo", "mo": [], "tu":[], "we":[], "th":[], "fr":[], "sa":[], "su":[], "mo_note": "", "tu_note": "", "we_note":"", "th_note":"", "fr_note":"", "sa_note":"", "su_note":""}
+            value = '{"first_day": "mo", "mo": [], "tu":[], "we":[], "th":[], "fr":[], "sa":[], "su":[], "mo_note": "", "tu_note": "", "we_note":"", "th_note":"", "fr_note":"", "sa_note":"", "su_note":""}'
+        if type(value) == dict:
+            value = json.dumps(value)
         return mark_safe(loader.render_to_string(self.template, {
-            "value": json.dumps(value),
+            "value": value,
             "name": name,
             "STATIC_URL": settings.STATIC_URL,
         }))
