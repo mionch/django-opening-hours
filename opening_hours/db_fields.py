@@ -4,7 +4,16 @@ import form_fields
 import widgets
 import json
 
+
+DEFAULT_OPENING_HOURS_JSON = '{"we_note": "false", "fr_note": "false", "fr": [], "su_note": "false", "mo_note": "false", "mo": [], "tu": [], "th_note": "false", "we": [], "su": [], "tu_note": "false", "th": [], "sa_note": "false", "sa": [], "first_day": "mo"}'
+
 class OpeningHoursField(with_metaclass(models.SubfieldBase, models.Field)):
+    def __init__(self, *args, **kwargs):
+        kwargs.update({
+            'default': DEFAULT_OPENING_HOURS_JSON,
+        })
+        return super(OpeningHoursField, self).__init__(*args, **kwargs)
+
     def get_internal_type(self):
         return "TextField"
 

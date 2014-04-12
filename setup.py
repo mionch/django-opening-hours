@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "django-opening-hours",
-    version = "1.4.2",
+    version = "1.4.3",
     url = 'https://github.com/ondrejsika/django-opening-hours/',
     license = 'MIT',
     description = "Opening hours field and admin widget",
