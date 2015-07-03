@@ -2,122 +2,109 @@
 .time {
     width: 40px;
 }
-
 .hover { cursor: hand; cursor: pointer; }
 </style>
+
 <script type="text/javascript">
-
-function is_time(val){
-    return val.match(/\d+:\d+/) != null && val.match(/\d+:\d+/).length == 1 && val.match(/\d+:\d+/)[0] == val;
-}
-
-function get_json() {
-    return JSON.parse(django.jQuery("#{{name}}_input_out").val());
-}
-
-function set_json(json) {
-    django.jQuery("#{{name}}_input_out").val(JSON.stringify(json));
-}
-
-function add(day) {
-    json = get_json()
-    json[day].push(["", ""]);
-    django.jQuery(".{{name}}_ajax").remove();
-    set_json(json);
-    loads(json);
-
-}
-
-function rm(day) {
-    json = get_json()
-    if(confirm('remove this opening hours?')) {
-        json[day].pop();
-        django.jQuery(".{{name}}_ajax").remove();
-        set_json(json);
-        loads(json);
+    if ($ == undefined) {
+        try {
+            $ = django.jQuery;
+        }
+        catch (Exception) {
+            console.log('nope')
+        }
     }
-}
 
-function dumps(){
-    json = get_json();
-    ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
-        json[day+"_note"] = django.jQuery("#"+day+"_note").val();
-        for (l = 0; l < json[day].length; l++) {
-            val = django.jQuery("#"+day+"_"+l+"_from").val();
-            json[day][l][0] = val;
+    function is_time(val){
+        if (!val || !val.length){
+            return true;
+        }
+        return val.match(/\d+:\d+/) != null && val.match(/\d+:\d+/).length == 1 && val.match(/\d+:\d+/)[0] == val;
+    }
+
+    function get_json_{{safe_name}}() {
+        try {
+            return JSON.parse($("#{{name}}_input_out").val());
+        }
+        catch (Exception){
+            console.log(Exception);
+        }
+    }
+
+    function set_json_{{safe_name}}(json){
+        $("#{{name}}_input_out").val(JSON.stringify(json));
+    }
+
+    function dumps_{{safe_name}}(){
+        console.log('dumps_{{safe_name}}');
+        json = get_json_{{safe_name}}();
+        var container = $("#{{name}}_opening_hours_table");
+        ["mo", "tu", "we", "th", "fr", "sa", "su"].forEach(function (day) {
+            input_from = container.find("."+day+"_0_from");
+            val = input_from.val();
+            if (json[day].length == 0) {
+                json[day].push(["", ""]);
+            }
+            json[day][0][0] = val;
             if (is_time(val)){
-                django.jQuery("#"+day+"_"+l+"_from").attr("style", "border: 1px solid #ccc;");
+                input_from.attr("style", "border: 1px solid #ccc;");
             }
             else {
-                django.jQuery("#"+day+"_"+l+"_from").attr("style", "border: 1px solid red;");
+                input_from.attr("style", "border: 1px solid red;");
             }
 
-            val = django.jQuery("#"+day+"_"+l+"_to").val();
-            json[day][l][1] = val;
+            input_to = container.find("."+day+"_0_to");
+            val = input_to.val();
+            json[day][0][1] = val;
             if (is_time(val)){
-                django.jQuery("#"+day+"_"+l+"_to").attr("style", "border: 1px solid #ccc;");
+                input_to.attr("style", "border: 1px solid #ccc;");
             }
             else {
-                django.jQuery("#"+day+"_"+l+"_to").attr("style", "border: 1px solid red;");
+                input_to.attr("style", "border: 1px solid red;");
             }
-        }
-    });
-    set_json(json);
-}
-
-function loads(){
-    json = get_json();
-    get_days().forEach(function (day) {
-        if (! django.jQuery("."+day).length) {
-            django.jQuery("#{{name}}_opening_hours_table").append("<tr class=\""+day+" day\"><td>"+day+"</td></tr>");
-        }
-        for (l = 0; l < json[day].length; l++) {
-            django.jQuery("."+day).append("<td class=\"{{name}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_from\" name=\""+day+"_"+l+"_from\" value=\""+json[day][l][0]+"\" class=\"time\"></td><td class=\"{{name}}_ajax\"><input type=\"text\" id=\""+day+"_"+l+"_to\" name=\""+day+"_"+l+"_to\" value=\""+json[day][l][1]+"\" class=\"time\"></td>")
-        }
-        django.jQuery("."+day).append("<td class=\"{{name}}_ajax\" colspan=\"10\"><input type=\"text\" id=\""+day+"_note\" value=\""+json[day+"_note"]+"\" placeholder=\"note\">&nbsp;<img class=\"hover\" onclick=\"add('"+day+"');\" src=\"{{STATIC_URL}}admin/img/icon_addlink.gif\"></a>&nbsp;<img  class=\"hover\" onclick=\"rm('"+day+"');\" src=\"{{STATIC_URL}}admin/img/icon-no.gif\"></td>");
-    });
-    set_json(json);
-}
-
-function get_days(){
-    json = get_json();
-    if (json["first_day"] == "su"){
-        return ["su", "mo", "tu", "we", "th", "fr", "sa"];
+        });
+        set_json_{{safe_name}}(json);
     }
-    else {
-        return ["mo", "tu", "we", "th", "fr", "sa", "su"];
+
+    function loads_{{safe_name}}(){
+        json = get_json_{{safe_name}}();
+        $.each(get_days(), function (day, label) {
+            var value_from = '';
+            var value_to = '';
+
+            if (json && day in json && json[day].length) {
+                value_from = json[day][0][0];
+                value_to = json[day][0][1];
+            }
+            var hours_table = $("#{{name}}_opening_hours_table");
+            hours_table.append("<tr class=\""+day+" day\"><td>"+label+"</td></tr>");
+            hours_table.find("."+day).append(
+                '<td class="{{name}}_ajax">'+
+                    '<span>Od:</span><input type="text" name="'+day+'_0_from" value="'+value_from+'" class="time '+day+'_0_from">' +
+                '</td>' +
+                '<td class=\"{{name}}_ajax\">' +
+                    '<span>Do:</span><input type="text" name="'+day+'_0_to" value="'+value_to+'" class="time '+day+'_0_to">' +
+                '</td>');
+        });
+        set_json_{{safe_name}}(json);
     }
-}
 
-django.jQuery(document).ready(function(){
-    django.jQuery("#{{name}}_input_out").val(django.jQuery("#{{name}}_input_in").val())
+    function get_days(){
+        return {"mo": "Poniedziałek", "tu": "Wtorek", "we": "Środa", "th": "Czwartek", "fr": "Piątek", "sa": "Sobota",
+                "su": "Niedziela"};
+    }
 
-    json = get_json()
-    if (! json.hasOwnProperty("first_day")) json["first_day"] = "mo";
-    django.jQuery("#{{name}}_first_day").val(json["first_day"]);
-    set_json(json);
-
-    loads();
-    setInterval(dumps, 100);
-
-    setInterval(function (){
-        json = get_json();
-        if (django.jQuery("#{{name}}_first_day").val() != json["first_day"]) {
-            json["first_day"] = django.jQuery("#{{name}}_first_day").val();
-            set_json(json);
-            django.jQuery(".day").remove();
-            loads();
+    $(document).ready(function(){
+        $("#{{name}}_input_out").val($("#{{name}}_input_in").val());
+        json = get_json_{{safe_name}}();
+        if (! json.hasOwnProperty("first_day")) {
+            json["first_day"] = "mo";
         }
-    }, 100);
-})
+        set_json_{{safe_name}}(json);
+        loads_{{safe_name}}();
+        setInterval(dumps_{{safe_name}}, 1000);
+    })
 </script>
-first day of week
-<select id="{{name}}_first_day">
-    <option value="mo">mo</option>
-    <option value="su">su</option>
-</select>
-<input id="{{name}}_input_in" type="hidden" value='{{value|safe}}'>
-<input id="{{name}}_input_out" type="hidden" name="{{name}}" value="">
-<table id="{{name}}_opening_hours_table">
-
-</table>
+<input id="{{name}}_input_in" type="hidden" value='{{value|safe}}'/>
+<input id="{{name}}_input_out" type="hidden" name="{{name}}" value=""/>
+<table id="{{name}}_opening_hours_table" class="opening-hours-multiinput"></table>
