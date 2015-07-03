@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from collections import OrderedDict
 import json
 
 def is_open(date, opening_hours):
@@ -19,3 +21,39 @@ def is_open(date, opening_hours):
             return True
     return False
 
+
+days = OrderedDict([
+    ("mo", u"Pn. "),
+    ("tu", u"Wt. "),
+    ("we", u"Śr."),
+    ("th", u"Czw."),
+    ("fr", u"Pt. "),
+    ("sa", u"Sb. "),
+    ("su", u"Ndz."),
+])
+
+def opening_hours_set(opening_hours):
+    for day, label in days.iteritems():
+        print day, label
+        values = opening_hours.get(day)
+        print values, 'V'
+        if len(values) == 1 and len(values[0]) == 2:
+            open_from = values[0][0]
+            open_to = values[0][1]
+            if open_from and open_to:
+                return True
+    return False
+
+def readable_opening_hours_value(opening_hours):
+    output = u""
+    for day, label in days.iteritems():
+        print day, label
+        values = opening_hours.get(day)
+        print values, 'V'
+        if len(values) == 1 and len(values[0]) == 2:
+            open_from = values[0][0]
+            open_to = values[0][1]
+            if open_from and open_to:
+                output += u"{}: {} - {}\n".format(label, open_from, open_to)
+                continue
+    return output

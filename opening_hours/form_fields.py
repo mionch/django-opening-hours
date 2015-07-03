@@ -19,7 +19,8 @@ class OpeningHoursField(forms.CharField):
             import re
             if not s:
                 return True
-            if re.match(r"\d+:\d+", s) and re.match(r"\d+:\d+", s).group() == s:
+
+            if re.match(r"^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$", s):
                 return True
             return False
 
