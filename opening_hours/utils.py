@@ -34,9 +34,7 @@ days = OrderedDict([
 
 def opening_hours_set(opening_hours):
     for day, label in days.iteritems():
-        print day, label
         values = opening_hours.get(day)
-        print values, 'V'
         if len(values) == 1 and len(values[0]) == 2:
             open_from = values[0][0]
             open_to = values[0][1]
@@ -47,9 +45,7 @@ def opening_hours_set(opening_hours):
 def readable_opening_hours_value(opening_hours):
     output = u""
     for day, label in days.iteritems():
-        print day, label
         values = opening_hours.get(day)
-        print values, 'V'
         if len(values) == 1 and len(values[0]) == 2:
             open_from = values[0][0]
             open_to = values[0][1]
