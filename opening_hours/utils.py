@@ -23,13 +23,13 @@ def is_open(date, opening_hours):
 
 
 days = OrderedDict([
-    ("mo", u"Pn. "),
-    ("tu", u"Wt. "),
-    ("we", u"Śr."),
-    ("th", u"Czw."),
-    ("fr", u"Pt. "),
-    ("sa", u"Sb. "),
-    ("su", u"Ndz."),
+    (u"mo", u"Pn. "),
+    (u"tu", u"Wt. "),
+    (u"we", u"Sr."),
+    (u"th", u"Czw."),
+    (u"fr", u"Pt. "),
+    (u"sa", u"Sb. "),
+    (u"su", u"Ndz."),
 ])
 
 def opening_hours_set(opening_hours):
