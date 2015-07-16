@@ -30,5 +30,4 @@ class OpeningHoursField(forms.CharField):
                 if not is_time(d[0]) or not is_time(d[1]):
                     raise ValidationError(u"Wprowadzono niepoprawny format godziny - dopuszczalne puste wartości lub "
                                            u"godzina w formacie HH:MM")
-        print json.dumps(data)
         return json.dumps(data)
